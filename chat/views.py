@@ -35,7 +35,6 @@ def api_login(request):
     user = authenticate(username=username, password=password)
     if user is None:
         return JsonResponse({"error": "invalid credentials"}, status=401)
-    print(f'user_id {user.id}')
 
 
     payload = {
