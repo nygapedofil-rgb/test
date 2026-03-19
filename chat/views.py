@@ -21,16 +21,21 @@ User = get_user_model()
 def api_login(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": str(e)}, status=400)
 
-    data = json.loads(request.body)
-    username = data.get("username")
-    password = data.get("password")
+    if not username or not password:
+        return JsonResponse({"error": "missing credentials"}, status=400)
 
     user = authenticate(username=username, password=password)
-    d = get_object_or_404(User, username=username)
-    print(f'user_id {d.id}')
     if user is None:
         return JsonResponse({"error": "invalid credentials"}, status=401)
+    print(f'user_id {user.id}')
 
 
     payload = {
