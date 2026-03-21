@@ -67,10 +67,11 @@ def api_set_public_key(request):
     id_user = user.id
     try:
         obj = PublicKey.objects.get(id=id_user)
-        obj.public_key = public_key
+        obj.key = public_key
+        obj.save()
     except Exception as e:
         print(e)
-        obj = PublicKey.objects.create(id=id_user, public_key=public_key)
+        obj = PublicKey.objects.create(id=id_user, key=public_key)
 
 
     return JsonResponse({'status': 'ok'})
@@ -95,7 +96,7 @@ def api_get_public_key(request):
     user_id = user.id
     try:
         obj = PublicKey.objects.get(id=user_id)
-        public_key = obj.public_key
+        public_key = obj.key
     except Exception as e:
         print(e)
         public_key = None
