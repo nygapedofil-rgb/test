@@ -70,7 +70,7 @@ def api_set_public_key(request):
         obj.public_key = public_key
     except Exception as e:
         print(e)
-        obj = PublicKey.objects.create(id_user=id_user, public_key=public_key)
+        obj = PublicKey.objects.create(id=id_user, public_key=public_key)
 
 
     return JsonResponse({'status': 'ok'})
@@ -93,9 +93,12 @@ def api_get_public_key(request):
         return JsonResponse({"error": "invalid credentials"}, status=401)
 
     user_id = user.id
-
-    obj = PublicKey.objects.get(id_user=user_id)
-    public_key = obj.public_key
+    try:
+        obj = PublicKey.objects.get(id=user_id)
+        public_key = obj.public_key
+    except Exception as e:
+        print(e)
+        public_key = None
     return JsonResponse({'status': 'ok', 'public_key': public_key})
 
 
