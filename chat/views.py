@@ -65,9 +65,9 @@ def api_set_public_key(request):
         return JsonResponse({"error": "invalid credentials"}, status=401)
 
     id_user = user.id
-    obj = PublicKey.object.get(id=id_user)
+    obj = PublicKey.objects.get(id=id_user)
     if obj is None:
-        obj = PublicKey.object.create(id_user=id_user, public_key=public_key)
+        obj = PublicKey.objects.create(id_user=id_user, public_key=public_key)
     else:
         obj.public_key = public_key
 
@@ -92,7 +92,7 @@ def api_get_public_key(request):
 
     user_id = user.id
 
-    obj = PublicKey.object.get(id_user=user_id)
+    obj = PublicKey.objects.get(id_user=user_id)
     public_key = obj.public_key
     return JsonResponse({'status': 'ok', 'public_key': public_key})
 
