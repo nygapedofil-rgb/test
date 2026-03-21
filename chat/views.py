@@ -84,6 +84,7 @@ def api_get_public_key(request):
         data = json.loads(request.body)
         username = data.get("username")
         password = data.get("password")
+        target_user = data.get("target_user")
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
 
@@ -93,7 +94,12 @@ def api_get_public_key(request):
     if user is None:
         return JsonResponse({"error": "invalid credentials"}, status=401)
 
-    user_id = user.id
+    try:
+        target = User.objects.get(username=target_user)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=404)
+
+    user_id = target.id
     try:
         obj = PublicKey.objects.get(id=user_id)
         public_key = obj.key
