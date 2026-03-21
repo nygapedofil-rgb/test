@@ -31,7 +31,8 @@ class JWTAuthMiddleware:
             try:
                 payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
                 scope["user"] = await get_user(payload["user_id"])
-            except jwt.InvalidTokenError:
+            except Exception as e:
+                print('jwt error', e)
                 scope["user"] = AnonymousUser()
         else:
             scope["user"] = AnonymousUser()
